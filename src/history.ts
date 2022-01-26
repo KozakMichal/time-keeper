@@ -4,7 +4,9 @@ let history: any;
 
 const getBrowserHistory = () => {
     if (!history) {
-        history = createBrowserHistory({});
+        history = createBrowserHistory({
+            basename: process.env.PUBLIC_URL,
+        });
     }
 
     return history;
