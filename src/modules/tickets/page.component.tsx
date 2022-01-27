@@ -12,6 +12,7 @@ import { TicketComponent } from '../../components/ticket/ticket.component';
 import { filterTimesStartedOnDate } from './utils';
 import { TimeCounterComponent } from '../../components/time-counter/time-couter.component';
 import { TimesModel } from './times.model';
+import TicketsDailyList from '../../components/daily-list/tickets-calendar.component';
 
 interface StateProps {
     search: string;
@@ -97,6 +98,9 @@ const TicketsPage = (
                                 label="Total Today: "
                             />
 
+                            <TicketsDailyList
+                                tickets={tickets}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
