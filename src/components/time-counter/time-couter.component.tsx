@@ -24,7 +24,8 @@ export function TimeCounterComponent({getTotal, ...props}: ComponentProps) {
                 clearInterval(interval);
             }
         }
-    }, [value, getTotal]);
+        // eslint-disable-next-line
+    }, []);
 
     if (!value) {
         return null;
