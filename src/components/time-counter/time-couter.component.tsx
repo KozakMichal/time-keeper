@@ -5,6 +5,7 @@ import { formatDuration } from '../../modules/tickets/utils';
 interface ComponentProps {
     getTotal: () => Duration|null;
     label: string;
+    speed?: number;
 }
 
 export function TimeCounterComponent({getTotal, ...props}: ComponentProps) {
@@ -17,7 +18,7 @@ export function TimeCounterComponent({getTotal, ...props}: ComponentProps) {
 
         interval = setInterval(() => {
             setValue(getTotal());
-        }, 1000);
+        }, props.speed || 1000);
 
         return () => {
             if (interval !== null) {

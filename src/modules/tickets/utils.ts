@@ -74,7 +74,7 @@ export const formatDuration = (duration: Duration|null) => {
         return '-';
     }
 
-    return `${duration?.hours()} hours ${duration.minutes()} minutes ${duration?.seconds()} seconds`;
+    return duration.asHours().toFixed(2);
 };
 
 export const getTotal = (tickets: TicketModel[] = []) => tickets.reduce(
