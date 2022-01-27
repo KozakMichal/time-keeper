@@ -8,6 +8,7 @@ import {
     getTotalSpendToday,
     isRunning,
 } from '../../modules/tickets/utils';
+import { ProgressComponent } from '../progress/progress.component';
 import { TimeCounterComponent } from '../time-counter/time-couter.component';
 
 interface ComponentProps {
@@ -38,7 +39,13 @@ export function TicketComponent({ ticket, start, end }: ComponentProps) {
                 {ticket.due && <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {moment(ticket.due).format('LLLL')}
                 </Typography>}
-                <hr />
+                {typeof ticket.estimate !== 'undefined' ? (
+                    <ProgressComponent
+                        times={ticket.times}
+                        buffer={+ticket.estimate}
+                    />
+                ) : <hr />}
+
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {
                         isInProgress ? (
@@ -54,7 +61,7 @@ export function TicketComponent({ ticket, start, end }: ComponentProps) {
                     }
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {
+                    {
                         isInProgress ? (
                             <TimeCounterComponent
                                 times={filterTimesStartedOnDate(ticket.times)}
