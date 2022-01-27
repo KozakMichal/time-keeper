@@ -1,7 +1,7 @@
 import { TicketModel } from './ticket.model';
 import { TimesModel } from './times.model';
 import * as constants from './constants';
-import moment, { Duration } from 'moment';
+import moment, { Duration, Moment } from 'moment';
 
 export const isRunning = (ticket: TicketModel) => {
     if (!ticket.times) {
@@ -36,6 +36,40 @@ export const getTotalSpend = (ticket: TicketModel): Duration|null => {
 
     return moment.duration(total);;
 };
+
+export const sumDurationsAndGetOpen = (times: TimesModel[] = []): [Duration|null, number[]] => {
+    if (!times) {
+        return [null, []];
+    }
+    let started: number[] = [];
+
+    const total = times.reduce(
+        (carry: number, time: TimesModel) => {
+            if (!time.end) {
+                started.push(time.start);
+                return carry;
+            }
+            carry += moment.utc(time.end).diff(moment.utc(time.start));
+
+            return carry;
+        },
+        0
+    );
+
+    return [moment.duration(total), started];
+};
+
+export const filterTimesStartedOnDate = (
+    times: TimesModel[] = [],
+    date: Moment = moment.utc()
+): TimesModel[] => times.filter(
+    (time) => moment(time.start).isSame(date, 'day')
+);
+
+export const sumAllStartedTillNow = (started: number[] = []) => started.reduce(
+    (carry, timeStamp) => carry + moment.utc().diff(moment(timeStamp)),
+    0
+);
 
 export const getTotalSpendToday = (ticket: TicketModel): Duration|null => {
     if (!ticket.times) {

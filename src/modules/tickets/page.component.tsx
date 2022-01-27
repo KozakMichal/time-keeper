@@ -9,8 +9,9 @@ import { Alert, Fab, Grid, Modal } from '@mui/material';
 import { TicketModel } from './ticket.model';
 import { CreateTicketForm } from './ticket-create.form';
 import { TicketComponent } from '../../components/ticket/ticket.component';
-import { getTotal, getTotalPerDay } from './utils';
+import { filterTimesStartedOnDate } from './utils';
 import { TimeCounterComponent } from '../../components/time-counter/time-couter.component';
+import { TimesModel } from './times.model';
 
 interface StateProps {
     search: string;
@@ -68,13 +69,34 @@ const TicketsPage = (
                     <Grid item xs={4}>
                         <Grid container spacing={1} alignItems="stretch">
                             <TimeCounterComponent
-                                getTotal={() => getTotal(tickets)}
+                                times={tickets.reduce(
+                                    (carry: TimesModel[], ticket: TicketModel) => {
+                                        if (ticket.times) {
+                                            carry = [...carry, ...ticket.times];
+                                        }
+                                        return carry;
+                                    },
+                                    []
+                                )}
                                 label="Total: "
-                            /><br />
-                            <TimeCounterComponent
-                                getTotal={() => getTotalPerDay(tickets)}
-                                label="Total today: "
                             />
+                            <br />
+                            <TimeCounterComponent
+                                times={tickets.reduce(
+                                    (carry: TimesModel[], ticket: TicketModel) => {
+                                        if (ticket.times) {
+                                            carry = [
+                                                ...carry,
+                                                ...filterTimesStartedOnDate(ticket.times),
+                                            ];
+                                        }
+                                        return carry;
+                                    },
+                                    []
+                                )}
+                                label="Total Today: "
+                            />
+
                         </Grid>
                     </Grid>
                 </Grid>

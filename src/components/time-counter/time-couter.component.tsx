@@ -1,23 +1,30 @@
 import { Duration } from 'moment';
 import { useEffect, useState } from 'react';
-import { formatDuration } from '../../modules/tickets/utils';
+import { TimesModel } from '../../modules/tickets/times.model';
+import { formatDuration, sumAllStartedTillNow, sumDurationsAndGetOpen } from '../../modules/tickets/utils';
 
 interface ComponentProps {
-    getTotal: () => Duration|null;
+    times?: TimesModel[];
     label: string;
     speed?: number;
 }
 
-export function TimeCounterComponent({getTotal, ...props}: ComponentProps) {
-    const [value, setValue] = useState<Duration|null>(
-        getTotal()
+export function TimeCounterComponent({...props}: ComponentProps) {
+    const [finishedDuration, started] = sumDurationsAndGetOpen(props.times || []);
+    const duration = finishedDuration?.clone().add(
+        sumAllStartedTillNow(started)
     );
+    const [value, setValue] = useState<Duration|null>(duration || null);
 
     useEffect(() => {
         let interval: NodeJS.Timer | null = null;
 
         interval = setInterval(() => {
-            setValue(getTotal());
+            const duration = finishedDuration?.clone().add(
+                sumAllStartedTillNow(started)
+            ) || null;
+
+            setValue(duration);
         }, props.speed || 1000);
 
         return () => {
@@ -26,7 +33,7 @@ export function TimeCounterComponent({getTotal, ...props}: ComponentProps) {
             }
         }
         // eslint-disable-next-line
-    }, []);
+    }, [finishedDuration, started]);
 
     if (!value) {
         return null;

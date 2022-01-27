@@ -2,6 +2,7 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 import moment from 'moment';
 import { TicketModel } from '../../modules/tickets/ticket.model';
 import {
+    filterTimesStartedOnDate,
     formatDuration,
     getTotalSpend,
     getTotalSpendToday,
@@ -42,7 +43,7 @@ export function TicketComponent({ ticket, start, end }: ComponentProps) {
                     {
                         isInProgress ? (
                             <TimeCounterComponent
-                                getTotal={() => getTotalSpend(ticket)}
+                                times={ticket.times}
                                 label="Total spend: "
                             />
                         ) : (
@@ -56,7 +57,7 @@ export function TicketComponent({ ticket, start, end }: ComponentProps) {
                 {
                         isInProgress ? (
                             <TimeCounterComponent
-                                getTotal={() => getTotalSpendToday(ticket)}
+                                times={filterTimesStartedOnDate(ticket.times)}
                                 label="Total today: "
                             />
                         ) : (
