@@ -24,8 +24,8 @@ const TicketsReducer = (
             return {
                 ...state,
                 tickets: [
-                    ...state.tickets,
                     (action as ReturnType<typeof createTicketDone>).payload.ticket,
+                    ...state.tickets,
                 ],
             };
         case constants.TICKET_CHANGED:
