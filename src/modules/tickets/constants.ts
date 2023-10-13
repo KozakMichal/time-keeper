@@ -11,4 +11,6 @@ export const END_TICKET = prefix + 'END';
 
 export const TICKET_CHANGED = prefix + 'CHANGED';
 
+export const TICKET_REMOVED = prefix + 'REMOVED';
+
 export const TICKETS_STORAGE_KEY_PREFIX = 'ticket-';

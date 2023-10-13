@@ -4,4 +4,5 @@ export interface TimesModel {
 
     start: number;
     end?: number;
+    remove?: number;
 };

@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { connect, DefaultRootState } from 'react-redux';
 import { Dispatch } from 'redux';
-import { createTicket, endTicket, fetchTickets, startTicket } from './actions';
+import { createTicket, endTicket, fetchTickets, startTicket, removeTicket } from './actions';
 import { Alert, Fab, Grid, Modal } from '@mui/material';
 import { TicketModel } from './ticket.model';
 import { CreateTicketForm } from './ticket-create.form';
@@ -26,6 +26,7 @@ interface TicketsPageDispatchProps {
     createTicket: (ticket: TicketModel, workspaceId: string) => ReturnType<typeof createTicket>,
     startTicket: (ticket: TicketModel) => ReturnType<typeof startTicket>,
     endTicket: (ticket: TicketModel) => ReturnType<typeof endTicket>,
+    removeTicket: (ticket: TicketModel) => ReturnType<typeof removeTicket>,
 }
 
 const TicketsPage = (
@@ -61,6 +62,7 @@ const TicketsPage = (
                                             ticket={ticket}
                                             start={props.startTicket}
                                             end={props.endTicket}
+                                            remove={props.removeTicket}
                                         />
                                     </Grid>
                                 )
@@ -150,6 +152,7 @@ const mapDispatchToProps = (dispatch: Dispatch): TicketsPageDispatchProps => ({
     createTicket: (ticket: TicketModel, workspaceId: string) => dispatch(createTicket(ticket, workspaceId)),
     startTicket: (ticket: TicketModel) => dispatch(startTicket(ticket)),
     endTicket: (ticket: TicketModel) => dispatch(endTicket(ticket)),
+    removeTicket: (ticket: TicketModel) => dispatch(removeTicket(ticket)),
 });
 
 export default connect<StateProps, TicketsPageDispatchProps>(

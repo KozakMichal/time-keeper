@@ -15,9 +15,10 @@ interface ComponentProps {
     ticket: TicketModel;
     start: (ticket: TicketModel) => void;
     end: (ticket: TicketModel) => void;
+    remove: (ticket: TicketModel) => void;
 }
 
-export function TicketComponent({ ticket, start, end }: ComponentProps) {
+export function TicketComponent({ ticket, start, end, remove }: ComponentProps) {
     const totalSpend = getTotalSpend(ticket);
     const spendToday = getTotalSpendToday(ticket);
     const isInProgress = isRunning(ticket);
@@ -95,6 +96,14 @@ export function TicketComponent({ ticket, start, end }: ComponentProps) {
                         Stop
                     </Button>
                 )}
+                <Button
+                    size="small"
+                    color="error"
+                    variant="contained"
+                    onClick={() => remove(ticket)}
+                >
+                    Remove
+                </Button>
             </CardActions>
         </Card>
     );
