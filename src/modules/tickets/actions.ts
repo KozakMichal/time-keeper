@@ -44,3 +44,8 @@ export const ticketChanged = (ticket: TicketModel) => ({
     type: constants.TICKET_CHANGED,
     payload: ticket,
 });
+
+export const removeTicket = (ticket: TicketModel) => ({
+    type: constants.TICKET_REMOVED,
+    payload: ticket,
+});

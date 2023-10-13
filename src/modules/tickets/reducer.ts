@@ -40,6 +40,15 @@ const TicketsReducer = (
                     }
                 ),
             };
+        case constants.TICKET_REMOVED:
+            return {
+                ...state,
+                tickets: state.tickets.filter(
+                    (ticket: TicketModel) => {
+                        return (ticket.id === action.payload.id);
+                    }
+                ),
+            };
         default:
             return state;
     }
