@@ -24,8 +24,8 @@ const TicketsReducer = (
             return {
                 ...state,
                 tickets: [
-                    ...state.tickets,
                     (action as ReturnType<typeof createTicketDone>).payload.ticket,
+                    ...state.tickets,
                 ],
             };
         case constants.TICKET_CHANGED:
@@ -37,6 +37,15 @@ const TicketsReducer = (
                             return ticket;
                         }
                         return action.payload;
+                    }
+                ),
+            };
+        case constants.TICKET_REMOVED:
+            return {
+                ...state,
+                tickets: state.tickets.filter(
+                    (ticket: TicketModel) => {
+                        return (ticket.id !== action.payload.id);
                     }
                 ),
             };

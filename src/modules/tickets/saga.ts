@@ -7,7 +7,7 @@ import {
 import * as constants from './constants';
 import * as localforage  from 'localforage';
 import { Await } from '../../utils/await.type';
-import { createTicket, createTicketDone, endTicket, fetchTickets, fetchTicketsDone, startTicket, ticketChanged } from './actions';
+import { createTicket, createTicketDone, endTicket, fetchTickets, fetchTicketsDone, startTicket, ticketChanged, removeTicket } from './actions';
 import { TicketModel } from './ticket.model';
 import { v4 } from 'uuid';
 import moment from 'moment';
@@ -114,11 +114,30 @@ function* handleEnd(action: ReturnType<typeof endTicket>) {
     yield put(ticketChanged(ticketToModify));
 }
 
+function* handleRemove(action: ReturnType<typeof removeTicket>) {
+    const ticket = action.payload;
+    const ticketToRemove: Await<TicketModel> = yield call(
+        [localforage, 'getItem'],
+        constants.TICKETS_STORAGE_KEY_PREFIX + ticket.workspaceId + '-' + ticket.id
+    );
+    const ticketId = getTicketId(ticketToRemove);
+
+    if (!ticketToRemove) {
+        return console.error('No ticket found!');
+    }
+
+    yield call(
+        [localforage, 'removeItem'],
+        ticketId
+    );
+}
+
 function* actionWatcher() {
     yield takeLatest(constants.FETCH_TICKETS, handleFetch);
     yield takeLatest(constants.CREATE_TICKET, handleCreate);
     yield takeLatest(constants.START_TICKET, handleStart);
     yield takeLatest(constants.END_TICKET, handleEnd);
+    yield takeLatest(constants.TICKET_REMOVED , handleRemove);
 };
 
 export default actionWatcher;
